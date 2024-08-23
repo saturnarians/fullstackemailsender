@@ -12,7 +12,7 @@ const app = express();
 
 // CORS configuration for live
 const corsOptions = {
-  origin: 'https://fullstackemailsender.vercel.app/',
+  origin:'https://fullstackemailsender.vercel.app',
   optionsSuccessStatus: 200
 };
 
