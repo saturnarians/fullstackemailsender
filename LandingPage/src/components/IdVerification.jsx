@@ -126,7 +126,7 @@ function IdVerification({ onNext }) {
       const formData = new FormData();
       formData.append('idImage', blob, 'id_image.png');
   
-      const response = await fetch('http://localhost:3001/upload', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -148,13 +148,13 @@ function IdVerification({ onNext }) {
 
   return (
     <div>
-      <div className="hidden 2xl:block">
+      <div className="hidden xl:block">
         <Grid container>
-          <Grid item xs={12}>
-            <h5>Capture your ID</h5>
+          <Grid item xs={12} className='grid'>
+            <h5 className='mb-4 text-center'>Verify your ID</h5>
             {isCameraActive ? (
               <>
-                <div className="relative mb-4">
+                <div className="relative mb-4 place-self-center">
                   <video ref={videoRef} className="w-full max-w-md" />
                   <canvas ref={canvasRef} className="hidden" width="400" height="300"></canvas>
                 </div>
@@ -163,10 +163,11 @@ function IdVerification({ onNext }) {
                 </div>
               </>
             ) : (
-              <Button onClick={startCamera} variant="contained" color="primary">Start Camera</Button>
+              <Button onClick={startCamera} variant="contained" color="primary" className="place-self-center">
+                Start Camera</Button>
             )}
             {idSource && (
-              <div className="mt-4">
+              <div className="mt-4 place-self-center">
                 <ImgBox>
                   <Img src={idSource} alt="Captured" />
                 </ImgBox>
@@ -181,7 +182,8 @@ function IdVerification({ onNext }) {
       <div className="xl:hidden" style={{ height: '100%', textAlign: 'center' }}>
         <Grid container>
           <Grid item xs={12}>
-            <h5>Capture your ID</h5>
+            <h3 className="mb-4 font-semibold">ID Verification</h3>
+            <h5 className="mb-4 " >Verify your ID</h5>
             {idSource && (
               <ImgBox>
                 <Img src={idSource} alt="snap" />

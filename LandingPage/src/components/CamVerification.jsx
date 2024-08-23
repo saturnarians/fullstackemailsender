@@ -81,7 +81,7 @@ function CamVerification({ onNext }) {
     formData.append('file', file);
 
     try {
-      await axios.post('http://localhost:3001/upload', formData);
+      await axios.post(`${import.meta.env.VITE_API_BASE_URL}/upload`, formData);
       console.log('File uploaded successfully');
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -100,11 +100,11 @@ function CamVerification({ onNext }) {
       {/* Desktop Version */}
       <div className="hidden 2xl:block">
         <Grid container>
-          <Grid item xs={12}>
-            <h5>Capture your image</h5>
+          <Grid item xs={12} className='grid'>
+            <h5 className='mb-4 text-center'>Capture your image!</h5>
             {isCameraActive ? (
               <>
-                <div className="relative mb-4">
+                <div className="relative mb-4 place-self-center">
                   <video ref={videoRef} className="w-full max-w-md" />
                   <canvas ref={canvasRef} className="hidden" width="400" height="300"></canvas>
                 </div>
@@ -113,10 +113,11 @@ function CamVerification({ onNext }) {
                 </div>
               </>
             ) : (
-              <Button onClick={startCamera} variant="contained" color="primary">Start Camera</Button>
+              <Button onClick={startCamera} variant="contained" color="primary" className="place-self-center">
+                Start Camera</Button>
             )}
             {source && (
-              <div className="mt-4">
+              <div className="mt-4 place-self-center">
                 <ImgBox>
                   <Img src={source} alt="Captured" />
                 </ImgBox>
@@ -131,7 +132,8 @@ function CamVerification({ onNext }) {
       <div className="xl:hidden" style={{ height: '100%', textAlign: 'center' }}>
         <Grid container>
           <Grid item xs={12}>
-            <h5>Capture your image</h5>
+            <h3 className='mb-4 font-semibold text-center text-blue-900'>Face Recognition</h3>
+            <h5 className='mb-4 text-center'>Capture your image!</h5>
             {source && (
               <ImgBox>
                 <Img src={source} alt="snap" />

